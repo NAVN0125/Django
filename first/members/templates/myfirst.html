@@ -1,0 +1,126 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <style>
+        body {
+            background-color: #7584ff;
+        }
+
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 70%;
+            height: 70%;
+        }
+
+        .btn-start {
+            width: 300px;
+            height: 150px;
+            font-size: 40px;
+            background: none;
+            color: whitesmoke;
+            border: none;
+        }
+
+        .target {
+            width: 100px;
+            height: 100px;
+            color: whitesmoke;
+            border-radius: 100px;
+            border: none;
+            display: none;
+        }
+    </style>
+
+    <script>
+        let repeat = 0;
+        let start = 0;
+        let end = 0;
+        let timeList = []
+
+        function countdown() {
+            document.getElementById("btn-start").style.display = "none";
+            let x = 3;
+            delay()
+
+            function delay() {
+                document.getElementById("countdown").innerText = x;
+                setTimeout(function () {
+                    if (x != 1) {
+                        x -= 1;
+                        delay()
+                    } else {
+                        document.getElementById("countdown").style.display = "none";
+                        displayTargetCircle()
+                    }
+                }, 1000)
+            }
+        }
+
+        function displayTargetCircle() {
+            document.getElementById("btn-start").style.display = "none";
+            spawnTarget()
+        }
+
+        function spawnTarget() {
+            start = new Date()
+            document.getElementById("target").style.display = "flex";
+            if (Math.floor(Math.random() * 2) === 0) {
+                document.getElementById("target").style.marginBottom = (Math.floor(Math.random() * 600)).toString() + "px";
+            } else {
+                document.getElementById("target").style.marginTop = (Math.floor(Math.random() * 600)).toString() + "px";
+            }
+
+            if (Math.floor(Math.random() * 2) === 0) {
+                document.getElementById("target").style.marginLeft = (Math.floor(Math.random() * 1000)).toString() + "px";
+            } else {
+                document.getElementById("target").style.marginRight = (Math.floor(Math.random() * 1000)).toString() + "px";
+            }
+        }
+
+        function nextTarget() {
+            document.getElementById("target").style.marginLeft = "0";
+            document.getElementById("target").style.marginRight = "0";
+            document.getElementById("target").style.marginTop = "0";
+            document.getElementById("target").style.marginBottom = "0";
+            repeat += 1
+            end = new Date()
+            timeList.push(Math.abs(start - end))
+
+
+            if (repeat === 40) {
+                endGame()
+            } else {
+                spawnTarget()
+            }
+
+        }
+
+        function endGame() {
+            let average = 0;
+            document.getElementById("target").style.display = "none";
+            document.getElementById("countdown").style.display = "flex";
+            for (let i = 0; i < timeList.length; i++) {
+                average += timeList[i]
+            }
+            document.getElementById("countdown").innerText = (average / 40).toString() + "ms"
+            timeList = []
+        }
+
+    </script>
+</head>
+<body class="center">
+<button class="target" id="target" onclick="nextTarget()"></button>
+<button class="center btn-start" onclick="countdown()" id="btn-start">Start</button>
+<p id="countdown" style="font-size: 50px; color: whitesmoke"></p>
+</body>
+</html>
